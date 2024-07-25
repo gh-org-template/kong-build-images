@@ -1,6 +1,7 @@
 {
-  "branches": ['main'],
+  "branches": ["main"],
   "tagFormat": "${version}",
+  "repositoryUrl": "https://github.com/gh-org-template/kong-build-images.git",
   "plugins": [
     ["@semantic-release/commit-analyzer", {
       "preset": "conventionalcommits",

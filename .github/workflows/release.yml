@@ -20,13 +20,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - uses: actions/create-github-app-token@v1
-      id: app-token
-      with:
-        app-id: ${{ vars.APP_ID }}
-        private-key: ${{ secrets.PRIVATE_KEY }}
-        owner: ${{ github.repository_owner }}
-
     - name: Set up QEMU
       id: qemu
       uses: docker/setup-qemu-action@v3
@@ -47,14 +40,14 @@ jobs:
       id: release
       uses: ahmadnassri/action-semantic-release@v2
       env:
-        GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Log in to the Container registry
       uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
-        password: ${{ steps.app-token.outputs.token }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Build & Push
       if: steps['release']['outputs']['published'] == 'true'

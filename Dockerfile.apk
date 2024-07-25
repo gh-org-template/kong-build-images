@@ -1,0 +1,56 @@
+FROM alpine:3.20
+
+RUN apk update \
+    && apk upgrade \
+    && apk add ca-certificates wget coreutils patch grep \
+    && update-ca-certificates \
+    && apk add --virtual build-deps \
+        autoconf \
+        automake \
+        bash \
+        bsd-compat-headers \
+        cmake \
+        curl \
+        g++ \
+        gcc \
+        git \
+        gnupg \
+        go \
+        libc-dev \
+        libffi-dev \
+        libtool \
+        linux-headers \
+        m4 \
+        make \
+        musl \
+        musl-dev \
+        ncurses-dev \
+        openssh \
+        openssl \
+        openssl-dev \
+        pcre-dev \
+        perl \
+        readline-dev \
+        sed \
+        tar \
+        unzip \
+        xz \
+        zlib-dev \
+    && sed -i'' 's/^mozilla\/DST_Root_CA_X3.crt$/!mozilla\/DST_Root_CA_X3.crt/g' /etc/ca-certificates.conf \
+    && update-ca-certificates
+
+RUN curl -fsSLo /tmp/yaml-0.2.5.tar.gz https://pyyaml.org/download/libyaml/yaml-0.2.5.tar.gz \
+    && cd /tmp \
+    && tar xzf yaml-0.2.5.tar.gz \
+    && ln -s /tmp/yaml-0.2.5 /tmp/yaml \
+    && cd /tmp/yaml \
+    && ./configure \
+      --libdir=/tmp/build/usr/local/kong/lib \
+      --includedir=/tmp/yaml-0.2.5 \
+    && make install \
+    && ./configure --libdir=/usr/local/kong/lib \
+    && make install \
+    && rm -rf /tmp/yaml-0.2.5
+
+RUN bash --version && \
+    cmake --version

@@ -68,6 +68,6 @@ jobs:
       if: ${{ failure() }}
       uses: mxschmitt/action-tmate@v3
       env:
-        token: ${{steps.release.outputs.release-version}}
+        token: ${{ steps.app-token.outputs.token }}
       with:
         limit-access-to-actor: true

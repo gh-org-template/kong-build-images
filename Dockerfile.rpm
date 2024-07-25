@@ -1,3 +1,40 @@
 FROM redhat/ubi8:8.10
 
-RUN yum update -y
+RUN yum update -y && \
+    yum -y install \
+        automake \
+        bzip2 \
+        ca-certificates \
+        cmake3 \
+        curl \
+        gcc \
+        gcc-c++ \
+        git \
+        libtool \
+        m4 \
+        make \
+        openssl-devel \
+        patch \
+        pcre-devel \
+        perl \
+        rpm-build \
+        tar \
+        unzip \
+        wget \
+        zlib-devel
+
+RUN curl -fsSLo /tmp/yaml-0.2.5.tar.gz https://pyyaml.org/download/libyaml/yaml-0.2.5.tar.gz \
+    && cd /tmp \
+    && tar xzf yaml-0.2.5.tar.gz \
+    && ln -s /tmp/yaml-0.2.5 /tmp/yaml \
+    && cd /tmp/yaml \
+    && ./configure \
+      --libdir=/tmp/build/usr/local/kong/lib \
+      --includedir=/tmp/yaml-0.2.5 \
+    && make install \
+    && ./configure --libdir=/usr/local/kong/lib \
+    && make install \
+    && rm -rf /tmp/yaml-0.2.5
+
+RUN bash --version && \
+    cmake --version

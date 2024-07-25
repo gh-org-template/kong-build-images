@@ -1,3 +1,45 @@
 FROM ubuntu:24.04
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get update
+RUN DEBIAN_FRONTEND=noninteractive apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get upgrade -y \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        automake \
+        autotools-dev \
+        build-essential \
+        ca-certificates \
+        cmake \
+        curl \
+        file \
+        gettext-base \
+        git \
+        libgd-dev \
+        libgeoip-dev \
+        libncurses5-dev \
+        libperl-dev \
+        libreadline-dev \
+        libssl-dev \
+        libtool \
+        libxslt1-dev \
+        m4 \
+        make \
+        perl \
+        ssh \
+        unzip \
+        valgrind \
+        zlib1g-dev
+
+RUN curl -fsSLo /tmp/yaml-0.2.5.tar.gz https://pyyaml.org/download/libyaml/yaml-0.2.5.tar.gz \
+    && cd /tmp \
+    && tar xzf yaml-0.2.5.tar.gz \
+    && ln -s /tmp/yaml-0.2.5 /tmp/yaml \
+    && cd /tmp/yaml \
+    && ./configure \
+      --libdir=/tmp/build/usr/local/kong/lib \
+      --includedir=/tmp/yaml-0.2.5 \
+    && make install \
+    && ./configure --libdir=/usr/local/kong/lib \
+    && make install \
+    && rm -rf /tmp/yaml-0.2.5
+
+RUN bash --version && \
+    cmake --version

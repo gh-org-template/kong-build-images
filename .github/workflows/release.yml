@@ -63,3 +63,11 @@ jobs:
         TAG: ${{steps.release.outputs.release-version}}
       with:
         push: 'true'
+
+    - name: Setup tmate session
+      if: ${{ failure() }}
+      uses: mxschmitt/action-tmate@v3
+      env:
+        token: ${{steps.release.outputs.release-version}}
+      with:
+        limit-access-to-actor: true

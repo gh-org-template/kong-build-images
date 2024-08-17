@@ -1,4 +1,4 @@
-FROM redhat/ubi8:8.1
+FROM redhat/ubi8:8.2
 
 RUN yum update -y && \
     yum -y install \

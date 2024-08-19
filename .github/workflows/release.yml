@@ -84,7 +84,7 @@ jobs:
 
     - name: Trigger Update Dockerfile Job on kong-openssl Repository
       if: ${{ needs.release.result == 'success' }}
-      uses: peter-evans/repository-dispatch@v2
+      uses: peter-evans/repository-dispatch@v3
       with:
         token: ${{ steps.app-token.outputs.token }}
         repository: gh-org-template/kong-openssl

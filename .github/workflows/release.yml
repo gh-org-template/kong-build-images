@@ -33,7 +33,7 @@ jobs:
       uses: docker/setup-buildx-action@v3
 
     - name: Build Only
-      uses: docker/bake-action@v6
+      uses: docker/bake-action@v7
       with:
         files: |
           ./docker-bake.hcl
@@ -53,7 +53,7 @@ jobs:
 
     - name: Build & Push
       if: steps['release']['outputs']['published'] == 'true'
-      uses: docker/bake-action@v6
+      uses: docker/bake-action@v7
       env:
         TAG: ${{steps.release.outputs.release-version}}
       with:
